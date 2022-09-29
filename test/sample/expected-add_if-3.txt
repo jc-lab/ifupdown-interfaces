@@ -1,0 +1,16 @@
+# The loopback network interface
+auto lo
+	iface lo inet loopback
+# The primary network interface
+auto eth0
+	iface eth0 inet static
+	address 135.79.246.80
+	netmask 255.255.255.0
+	gateway 135.79.246.1
+	dns-nameservers 8.8.8.8 8.8.4.4
+
+auto vmbr5
+iface vmbr5 inet manual
+    address 1.1.1.1/24
+    ovs_type OVSBridge
+    ovs_ports eno1 eno2
