@@ -216,6 +216,15 @@ export class IfUpdownInterfaces {
       text: ''
     });
   }
+
+  public removeInterface(iface: string): boolean {
+    const index = this._modifiedBlocks.findIndex((block) => block.type === BlockType.iface && block.iface === iface);
+    if (index >= 0) {
+      this._modifiedBlocks.splice(index, 1);
+      return true;
+    }
+    return false;
+  }
 }
 
 export default IfUpdownInterfaces;
