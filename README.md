@@ -1,51 +1,47 @@
-# throttle-merge
+# ifupdown-interfaces
 
 # Installation
 
 **YARN**
 
 ```bash
-$ yarn add throttle-merge
+$ yarn add ifupdown-interfaces
 ```
 
 **NPM**
 
 ```bash
-$ npm install --save throttle-merge
+$ npm install --save ifupdown-interfaces
 ```
 
 # Usage
 
 ```typescript
-import ThrottleMerge from 'throttle-merge';
+import IfUpdownInterfaces from 'ifupdown-interfaces';
 
-describe('test', () => {
-  it('test', async () => {
-    const mergedData: number[] = [];
+const instance = new IfUpdownInterfaces();
+await instance.open('/etc/network/interfaces');
 
-    const throttle = new ThrottleMerge<number, number>({
-      executor: (requests) => {
-        requests.forEach((request) => {
-          mergedData.push(request.data);
-          request.resolve(request.data);
-        });
-      }
-    });
+instance.addSingleLine('auto', ['vmbr5']);
+instance.addInterface('vmbr5', ['inet', 'manual'], [
+  {
+    comment: false,
+    key: 'address',
+    value: '1.1.1.1/24'
+  },
+  {
+    comment: false,
+    key: 'ovs_type',
+    value: 'OVSBridge'
+  },
+  {
+    comment: false,
+    key: 'ovs_ports',
+    value: 'eno1 eno2'
+  }
+]);
 
-    expect(await throttle.request(1)).toBe(1);
-    expect(await throttle.request(2)).toBe(2);
-    expect(await throttle.request(3)).toBe(3);
-
-    expect(mergedData).toStrictEqual([1, 2, 3]);
-    mergedData.splice(0, mergedData.length);
-
-    expect(await throttle.request(4)).toBe(4);
-    expect(await throttle.request(5)).toBe(5);
-    expect(await throttle.request(6)).toBe(6);
-
-    expect(mergedData).toStrictEqual([4, 5, 6]);
-  });
-});
+await instance.save();
 ```
 
 # License
