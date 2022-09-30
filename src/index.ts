@@ -180,7 +180,7 @@ export class IfUpdownInterfaces {
         return block.text;
       }
     })
-      .join('\n');
+      .join('\n') + '\n';
   }
 
   public save(filename?: string | undefined): Promise<void> {
